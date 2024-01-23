@@ -1,0 +1,20 @@
+function init(self)
+	if not zendesk then
+		print("Zendesk is not supported on this platform")
+		return
+	end
+
+	zendesk.set_callback(function(self, event, data)
+		if event == zendesk.MSG_ERROR then
+			print("An error occured")
+			pprint(data)
+		elseif event == zendesk.MSG_INITIALIZED then
+			print("Initialized")
+			pprint(data)
+			zendesk.show_messaging()
+		end
+	end)
+
+	local channel = sys.get_config_string("zendesk.channel")
+	zendesk.initialize(channel)
+end

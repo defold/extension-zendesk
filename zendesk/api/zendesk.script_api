@@ -1,0 +1,54 @@
+- name: zendesk
+  type: table
+  desc: Defold native extension to interact with the Zendesk SDK.
+
+  members:
+
+#*****************************************************************************************************
+
+    - name: initialize
+      type: function
+      desc: Initialize the Zendesk SDK
+      
+      params:
+        - name: channel
+          type: string
+          desc: Zendesk channel to initialize SDK with
+
+#*****************************************************************************************************
+
+    - name: set_callback
+      type: function
+      desc: Set a callback for events from the Zendesk SDK
+      
+      params:
+        - name: callback
+          type: function
+          desc: Function to call when a Zendesk SDK event is received (self, event, data)
+
+#*****************************************************************************************************
+
+    - name: show_messaging
+      type: function
+      desc: Show the conversation screen.
+
+#*****************************************************************************************************
+
+    - name: MSG_INIT_ERROR
+      type: number
+      desc: An error was detected while initializing the Zendesk SDK 
+
+    - name: MSG_INIT_SUCCESS
+      type: number
+      desc: The Zendesk SDK has been initialized successfully
+
+    - name: MSG_INTERNAL_ERROR
+      type: number
+      desc: An internal error occured
+
+    - name: MSG_ERROR
+      type: number
+      desc: An generic error occured
+
+
+#*****************************************************************************************************

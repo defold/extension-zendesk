@@ -1,0 +1,27 @@
+[bootstrap]
+main_collection = /main/main.collectionc
+
+[script]
+shared_state = 1
+
+[project]
+title = Zendesk
+
+[ios]
+bundle_identifier = com.defold.zendesk
+
+[android]
+package = com.defold.zendesk
+minimum_sdk_version = 21
+
+[osx]
+bundle_identifier = com.defold.zendesk
+
+[display]
+width = 720
+height = 1280
+dynamic_orientation = 1
+
+[library]
+include_dirs = zendesk
+

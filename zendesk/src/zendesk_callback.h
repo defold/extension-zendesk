@@ -7,10 +7,13 @@ namespace dmZendesk {
 
 enum Message
 {
-    MSG_INIT_ERROR =               0,
-    MSG_INIT_SUCCESS =             1,
-    MSG_INTERNAL_ERROR =           2,
-    MSG_ERROR =                    3,
+    MSG_INIT_ERROR =                   0,
+    MSG_INIT_SUCCESS =                 1,
+    MSG_INTERNAL_ERROR =               2,
+    MSG_ERROR =                        3,
+    MSG_UNREAD_MESSAGE_COUNT_CHANGED = 4,
+    MSG_AUTHENTICATION_FAILED =        5,
+    MSG_FIELD_VALIDATION_FAILED =      6,
 };
 
 struct CallbackData

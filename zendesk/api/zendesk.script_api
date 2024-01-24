@@ -50,5 +50,17 @@
       type: number
       desc: An generic error occured
 
+    - name: MSG_UNREAD_MESSAGE_COUNT_CHANGED
+      type: number
+      desc: The number of unread messages has changed
+
+    - name: MSG_AUTHENTICATION_FAILED
+      type: number
+      desc: A REST call failed for authentication reasons
+
+    - name: MSG_FIELD_VALIDATION_FAILED
+      type: number
+      desc: Validation checks failed for conversation fields
+
 
 #*****************************************************************************************************

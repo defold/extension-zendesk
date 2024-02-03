@@ -5,9 +5,14 @@
 namespace dmZendesk {
 
 void Initialize_Ext();
+void Finalize_Ext();
 
 void Initialize(const char* channel);
 void ShowMessaging();
+void AddConversationFieldString(const char* key, const char* value);
+void AddConversationFieldNumber(const char* key, const float value);
+void AddConversationFieldBoolean(const char* key, const bool value);
+void ClearConversationFields();
 
 } //namespace dmZendesk
 

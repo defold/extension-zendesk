@@ -21,9 +21,26 @@ namespace dmZendesk
 
         jmethodID      m_Initialize;
         jmethodID      m_ShowMessaging;
+        jmethodID      m_AddConversationFieldString;
+        jmethodID      m_AddConversationFieldFloat;
+        jmethodID      m_AddConversationFieldBoolean;
+        jmethodID      m_ClearConversationFields;
     };
 
     static ZendeskJNI g_Zendesk;
+
+    static void InitJNIMethods(JNIEnv* env, jclass cls)
+    {
+        g_Zendesk.m_Initialize = env->GetMethodID(cls, "initialize", "(Ljava/lang/String;)V");
+        g_Zendesk.m_ShowMessaging = env->GetMethodID(cls, "showMessaging", "()V");
+        g_Zendesk.m_AddConversationFieldString = env->GetMethodID(cls, "addConversationFieldString", "(Ljava/lang/String;Ljava/lang/String;)V");
+        g_Zendesk.m_AddConversationFieldFloat = env->GetMethodID(cls, "addConversationFieldFloat", "(Ljava/lang/String;F)V");
+        g_Zendesk.m_AddConversationFieldBoolean = env->GetMethodID(cls, "addConversationFieldBoolean", "(Ljava/lang/String;Z)V");
+        g_Zendesk.m_ClearConversationFields = env->GetMethodID(cls, "clearConversationFields", "()V");
+        // g_Zendesk.m_GetInstallationAuthToken = env->GetMethodID(cls, "getInstallationAuthToken", "()V");
+        // g_Zendesk.m_GetInstallationId = env->GetMethodID(cls, "getInstallationId", "()V");
+        // g_Zendesk.m_SetOption = env->GetMethodID(cls, "setOption", "(Ljava/lang/String;Ljava/lang/String;)Z");
+    }
 
     static void CallVoidMethod(jobject instance, jmethodID method)
     {
@@ -43,13 +60,36 @@ namespace dmZendesk
         env->DeleteLocalRef(jstr);
     }
 
-    static void InitJNIMethods(JNIEnv* env, jclass cls)
+    static void CallVoidMethodStringString(jobject instance, jmethodID method, const char* cstr1, const char* cstr2)
     {
-        g_Zendesk.m_Initialize = env->GetMethodID(cls, "initialize", "(Ljava/lang/String;)V");
-        g_Zendesk.m_ShowMessaging = env->GetMethodID(cls, "showMessaging", "()V");
-        // g_Zendesk.m_GetInstallationAuthToken = env->GetMethodID(cls, "getInstallationAuthToken", "()V");
-        // g_Zendesk.m_GetInstallationId = env->GetMethodID(cls, "getInstallationId", "()V");
-        // g_Zendesk.m_SetOption = env->GetMethodID(cls, "setOption", "(Ljava/lang/String;Ljava/lang/String;)Z");
+        dmAndroid::ThreadAttacher threadAttacher;
+        JNIEnv* env = threadAttacher.GetEnv();
+
+        jstring jstr1 = env->NewStringUTF(cstr1);
+        jstring jstr2 = env->NewStringUTF(cstr2);
+        env->CallVoidMethod(instance, method, jstr1, jstr2);
+        env->DeleteLocalRef(jstr1);
+        env->DeleteLocalRef(jstr2);
+    }
+
+    static void CallVoidMethodStringFloat(jobject instance, jmethodID method, const char* cstr, const float cfloat)
+    {
+        dmAndroid::ThreadAttacher threadAttacher;
+        JNIEnv* env = threadAttacher.GetEnv();
+
+        jstring jstr = env->NewStringUTF(cstr);
+        env->CallVoidMethod(instance, method, jstr, cfloat);
+        env->DeleteLocalRef(jstr);
+    }
+
+    static void CallVoidMethodStringBoolean(jobject instance, jmethodID method, const char* cstr, const bool cbool)
+    {
+        dmAndroid::ThreadAttacher threadAttacher;
+        JNIEnv* env = threadAttacher.GetEnv();
+
+        jstring jstr = env->NewStringUTF(cstr);
+        env->CallVoidMethod(instance, method, jstr, cbool);
+        env->DeleteLocalRef(jstr);
     }
 
     void Initialize_Ext() {
@@ -65,6 +105,10 @@ namespace dmZendesk
         g_Zendesk.m_ZendeskJNI = env->NewGlobalRef(env->NewObject(cls, jni_constructor, threadAttacher.GetActivity()->clazz));
     }
 
+    void Finalize_Ext() {
+        
+    }
+
 
     void Initialize(const char* channel) {
         CallVoidMethodString(g_Zendesk.m_ZendeskJNI, g_Zendesk.m_Initialize, channel);
@@ -72,6 +116,22 @@ namespace dmZendesk
 
     void ShowMessaging() {
         CallVoidMethod(g_Zendesk.m_ZendeskJNI, g_Zendesk.m_ShowMessaging);
+    }
+
+    void AddConversationFieldString(const char* key, const char* value) {
+        CallVoidMethodStringString(g_Zendesk.m_ZendeskJNI, g_Zendesk.m_AddConversationFieldString, key, value);
+    }
+
+    void AddConversationFieldNumber(const char* key, const float value) {
+        CallVoidMethodStringFloat(g_Zendesk.m_ZendeskJNI, g_Zendesk.m_AddConversationFieldString, key, value);
+    }
+
+    void AddConversationFieldBoolean(const char* key, const bool value) {
+        CallVoidMethodStringBoolean(g_Zendesk.m_ZendeskJNI, g_Zendesk.m_AddConversationFieldString, key, value);
+    }
+
+    void ClearConversationFields() {
+        CallVoidMethod(g_Zendesk.m_ZendeskJNI, g_Zendesk.m_ClearConversationFields);
     }
 
 

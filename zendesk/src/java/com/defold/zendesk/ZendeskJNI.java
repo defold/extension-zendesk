@@ -6,6 +6,9 @@ import android.util.Log;
 import org.json.JSONObject;
 import org.json.JSONException;
 
+import java.util.Map;
+import java.util.HashMap;
+
 // https://zendesk.github.io/mobile_sdk_javadocs/zendesk-sdks/zendesk-android/1.17.0/zendesk/android/package-summary.html
 import zendesk.android.Zendesk;
 import zendesk.android.SuccessCallback;
@@ -39,6 +42,8 @@ public class ZendeskJNI implements ZendeskEventListener {
 
     private Activity activity;
 
+    private Map<String, Object> conversationFields = new HashMap<>();
+
     public ZendeskJNI(Activity activity) {
         this.activity = activity;
     }
@@ -68,6 +73,30 @@ public class ZendeskJNI implements ZendeskEventListener {
     public void showMessaging() {
         Log.i(TAG, "Showing messaging");
         Zendesk.getInstance().getMessaging().showMessaging(activity);
+    }
+
+    public void addConversationFieldString(String key, String value) {
+        Log.i(TAG, "Add conversation field string");
+        conversationFields.put(key, value);
+        Zendesk.getInstance().getMessaging().setConversationFields(conversationFields);
+    }
+
+    public void addConversationFieldString(String key, float value) {
+        Log.i(TAG, "Add conversation field float");
+        conversationFields.put(key, value);
+        Zendesk.getInstance().getMessaging().setConversationFields(conversationFields);
+    }
+
+    public void addConversationFieldBoolean(String key, boolean value) {
+        Log.i(TAG, "Add conversation field boolean");
+        conversationFields.put(key, value);
+        Zendesk.getInstance().getMessaging().setConversationFields(conversationFields);
+    }
+
+    public void clearConversationFields() {
+        Log.i(TAG, "Add conversation field boolean");
+        conversationFields.clear();
+        Zendesk.getInstance().getMessaging().clearConversationFields();
     }
 
     @Override

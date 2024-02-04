@@ -18,6 +18,7 @@
 @class ZendeskSDKMessaging;
 @class MessagingFactory;
 @class ZDKDefaultMessagingFactory;
+@class ZDKZendeskUser;
 
 @interface ZendeskObserver : NSObject
 @end
@@ -25,11 +26,12 @@
 @implementation ZendeskObserver
 @end
 
-namespace dmZendesk {
-
-
-    struct ZendeskIOS {
-        ZendeskIOS() {
+namespace dmZendesk
+{
+    struct ZendeskIOS
+    {
+        ZendeskIOS()
+        {
             memset(this, 0, sizeof(*this));
         }
 
@@ -44,7 +46,8 @@ namespace dmZendesk {
     // bool g_Initialized = FALSE;
     // ZendeskExt* g_ZendeskExt = [[ZendeskExt alloc] init]
 
-    void SendSimpleMessage(Message msg, id obj) {
+    void SendSimpleMessage(Message msg, id obj)
+    {
         NSError* error;
         NSData* jsonData = [NSJSONSerialization dataWithJSONObject:obj options:(NSJSONWritingOptions)0 error:&error];
 
@@ -73,31 +76,37 @@ namespace dmZendesk {
         }
     }
 
-    void SendErrorMessage(NSError *error) {
+    void SendErrorMessage(NSError *error)
+    {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         [dict setObject:error.localizedDescription forKey:@"error"];
         SendSimpleMessage(MSG_ERROR, dict);
     }
 
-    void SendSimpleMessage(Message msg) {
+    void SendSimpleMessage(Message msg)
+    {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         SendSimpleMessage(msg, dict);
     }
 
-    void SendSimpleMessage(Message msg, NSString *key, NSString *value) {
+    void SendSimpleMessage(Message msg, NSString *key, NSString *value)
+    {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         [dict setObject:value forKey:key];
         SendSimpleMessage(msg, dict);
     }
 
-    void Initialize_Ext() {
+    void Initialize_Ext()
+    {
         g_ZendeskIOS.m_Initialized = FALSE;
         g_ZendeskIOS.m_ConversationFields = [[NSMutableDictionary alloc] init];
         g_ZendeskIOS.m_ZendeskObserver = [[ZendeskObserver alloc] init];
     }
 
-    void Finalize_Ext() {
-        if (g_ZendeskIOS.m_Initialized) {
+    void Finalize_Ext()
+    {
+        if (g_ZendeskIOS.m_Initialized)
+        {
             [[Zendesk instance] removeEventObserver:g_ZendeskIOS.m_ZendeskObserver];
             g_ZendeskIOS.m_Initialized = FALSE;
         }
@@ -105,18 +114,21 @@ namespace dmZendesk {
 
 
     void Initialize(const char* channel) {
-        [Zendesk initializeWithChannelKey:@"<channel_key>"
+        [Zendesk initializeWithChannelKey:[NSString stringWithUTF8String:channel]
                          messagingFactory:[[ZDKDefaultMessagingFactory alloc] init]
                       completionHandler:^(Zendesk * _Nullable zendesk, NSError * _Nullable error) {
-            if (error != nil) {
+            if (error != nil)
+            {
                 NSLog(@"Zendesk did not initialize.\nError: %@", error.localizedDescription);
                 SendSimpleMessage(MSG_INIT_ERROR, @"error", error.localizedDescription);
             }
-            else {
+            else
+            {
                 g_ZendeskIOS.m_Initialized = TRUE;
                 SendSimpleMessage(MSG_INIT_SUCCESS);
                 [zendesk addEventObserver:g_ZendeskIOS.m_ZendeskObserver :^(enum ZDKZendeskEvent event, id _Nullable value) {
-                    switch (event) {
+                    switch (event)
+                    {
                     case ZDKZendeskEventUnreadMessageCountChanged:
                         SendSimpleMessage(MSG_UNREAD_MESSAGE_COUNT_CHANGED);
                         break;
@@ -131,30 +143,65 @@ namespace dmZendesk {
         }];
     }
 
-    void ShowMessaging() {
+    void ShowMessaging()
+    {
         UIViewController *viewController = [Zendesk.instance.messaging messagingViewController];
-        if (viewController != NULL) {
+        if (viewController != NULL)
+        {
             UIWindow* window = (UIWindow*)dmGraphics::GetNativeiOSUIWindow();
             [window.rootViewController.navigationController showViewController:viewController sender:window.rootViewController];
         }
     }
 
-    void AddConversationFieldString(const char* key, const char* value) {
+    void Login(const char* jwt)
+    {
+        [Zendesk.instance loginUserWith:[NSString stringWithUTF8String:jwt] completionHandler:^(ZDKZendeskUser * _Nullable user, NSError * _Nullable error) {
+            if (error)
+            {
+                SendSimpleMessage(MSG_AUTHENTICATION_FAILED);
+            }
+            else
+            {
+                SendSimpleMessage(MSG_AUTHENTICATION_SUCCESS);
+            }
+        }];
+
+    }
+
+    void Logout()
+    {
+        [Zendesk.instance logoutUserWithCompletionHandler:^(NSError * _Nullable error) {
+            if (error)
+            {
+                SendSimpleMessage(MSG_LOGOUT_FAILED);
+            }
+            else
+            {
+                SendSimpleMessage(MSG_LOGOUT_SUCCESS);
+            }
+        }];
+    }
+
+    void AddConversationFieldString(const char* key, const char* value)
+    {
         [g_ZendeskIOS.m_ConversationFields setValue:[NSString stringWithUTF8String:value] forKey:[NSString stringWithUTF8String:key]];
         [Zendesk.instance.messaging setConversationFields:g_ZendeskIOS.m_ConversationFields];
     }
 
-    void AddConversationFieldNumber(const char* key, const float value) {
+    void AddConversationFieldNumber(const char* key, const float value)
+    {
         [g_ZendeskIOS.m_ConversationFields setValue:[NSNumber numberWithFloat:value] forKey:[NSString stringWithUTF8String:key]];
         [Zendesk.instance.messaging setConversationFields:g_ZendeskIOS.m_ConversationFields];
     }
 
-    void AddConversationFieldBoolean(const char* key, const bool value) {
+    void AddConversationFieldBoolean(const char* key, const bool value)
+    {
         [g_ZendeskIOS.m_ConversationFields setValue:[NSNumber numberWithBool:value] forKey:[NSString stringWithUTF8String:key]];
         [Zendesk.instance.messaging setConversationFields:g_ZendeskIOS.m_ConversationFields];
     }
 
-    void ClearConversationFields() {
+    void ClearConversationFields()
+    {
         [g_ZendeskIOS.m_ConversationFields removeAllObjects];
         [Zendesk.instance.messaging clearConversationFields];
     }

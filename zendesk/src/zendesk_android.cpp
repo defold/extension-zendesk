@@ -21,6 +21,8 @@ namespace dmZendesk
 
         jmethodID      m_Initialize;
         jmethodID      m_ShowMessaging;
+        jmethodID      m_Login;
+        jmethodID      m_Logout;
         jmethodID      m_AddConversationFieldString;
         jmethodID      m_AddConversationFieldFloat;
         jmethodID      m_AddConversationFieldBoolean;
@@ -33,13 +35,12 @@ namespace dmZendesk
     {
         g_Zendesk.m_Initialize = env->GetMethodID(cls, "initialize", "(Ljava/lang/String;)V");
         g_Zendesk.m_ShowMessaging = env->GetMethodID(cls, "showMessaging", "()V");
+        g_Zendesk.m_Login = env->GetMethodID(cls, "login", "(Ljava/lang/String;)V");
+        g_Zendesk.m_Logout = env->GetMethodID(cls, "logout", "()V");
         g_Zendesk.m_AddConversationFieldString = env->GetMethodID(cls, "addConversationFieldString", "(Ljava/lang/String;Ljava/lang/String;)V");
         g_Zendesk.m_AddConversationFieldFloat = env->GetMethodID(cls, "addConversationFieldFloat", "(Ljava/lang/String;F)V");
         g_Zendesk.m_AddConversationFieldBoolean = env->GetMethodID(cls, "addConversationFieldBoolean", "(Ljava/lang/String;Z)V");
         g_Zendesk.m_ClearConversationFields = env->GetMethodID(cls, "clearConversationFields", "()V");
-        // g_Zendesk.m_GetInstallationAuthToken = env->GetMethodID(cls, "getInstallationAuthToken", "()V");
-        // g_Zendesk.m_GetInstallationId = env->GetMethodID(cls, "getInstallationId", "()V");
-        // g_Zendesk.m_SetOption = env->GetMethodID(cls, "setOption", "(Ljava/lang/String;Ljava/lang/String;)Z");
     }
 
     static void CallVoidMethod(jobject instance, jmethodID method)
@@ -109,13 +110,20 @@ namespace dmZendesk
         
     }
 
-
     void Initialize(const char* channel) {
         CallVoidMethodString(g_Zendesk.m_ZendeskJNI, g_Zendesk.m_Initialize, channel);
     }
 
     void ShowMessaging() {
         CallVoidMethod(g_Zendesk.m_ZendeskJNI, g_Zendesk.m_ShowMessaging);
+    }
+
+    void Login(const char* jwt) {
+        CallVoidMethodString(g_Zendesk.m_ZendeskJNI, g_Zendesk.m_Login, jwt);
+    }
+
+    void Logout() {
+        CallVoidMethod(g_Zendesk.m_ZendeskJNI, g_Zendesk.m_Logout);
     }
 
     void AddConversationFieldString(const char* key, const char* value) {

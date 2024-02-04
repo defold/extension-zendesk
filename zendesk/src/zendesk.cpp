@@ -114,6 +114,21 @@ static int Lua_ShowMessaging(lua_State* L)
     return 0;
 }
 
+static int Lua_Login(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    const char* jwt = luaL_checkstring(L, 1);
+    Login(jwt);
+    return 0;
+}
+
+static int Lua_Logout(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    Logout();
+    return 0;
+}
+
 static const luaL_reg Zendesk_methods[] =
 {   
     {"initialize", Lua_Initialize},
@@ -121,6 +136,8 @@ static const luaL_reg Zendesk_methods[] =
     {"set_conversation_fields", Lua_SetConversationFields},
     {"clear_conversation_fields", Lua_ClearConversationFields},
     {"show_messaging", Lua_ShowMessaging},
+    {"login", Lua_Login},
+    {"logout", Lua_Logout},
     {0, 0}
 };
 
@@ -138,9 +155,11 @@ static void LuaInit(lua_State* L)
     SETCONSTANT(MSG_INTERNAL_ERROR)
     SETCONSTANT(MSG_ERROR)
     SETCONSTANT(MSG_UNREAD_MESSAGE_COUNT_CHANGED)
+    SETCONSTANT(MSG_AUTHENTICATION_SUCCESS)
     SETCONSTANT(MSG_AUTHENTICATION_FAILED)
     SETCONSTANT(MSG_FIELD_VALIDATION_FAILED)
-
+    SETCONSTANT(MSG_LOGOUT_SUCCESS)
+    SETCONSTANT(MSG_LOGOUT_FAILED)
 
     #undef SETCONSTANT
     

@@ -9,8 +9,11 @@ import org.json.JSONException;
 import java.util.Map;
 import java.util.HashMap;
 
+import kotlin.Unit;
+
 // https://zendesk.github.io/mobile_sdk_javadocs/zendesk-sdks/zendesk-android/1.17.0/zendesk/android/package-summary.html
 import zendesk.android.Zendesk;
+import zendesk.android.ZendeskUser;
 import zendesk.android.SuccessCallback;
 import zendesk.android.FailureCallback;
 
@@ -37,8 +40,11 @@ public class ZendeskJNI implements ZendeskEventListener {
     private static final int MSG_INTERNAL_ERROR =               2;
     private static final int MSG_ERROR =                        3;
     private static final int MSG_UNREAD_MESSAGE_COUNT_CHANGED = 4;
-    private static final int MSG_AUTHENTICATION_FAILED =        5;
-    private static final int MSG_FIELD_VALIDATION_FAILED =      6;
+    private static final int MSG_AUTHENTICATION_SUCCESS =       5;
+    private static final int MSG_AUTHENTICATION_FAILED =        6;
+    private static final int MSG_FIELD_VALIDATION_FAILED =      7;
+    private static final int MSG_LOGOUT_SUCCESS =               8;
+    private static final int MSG_LOGOUT_FAILED =                9;
 
     private Activity activity;
 
@@ -50,29 +56,68 @@ public class ZendeskJNI implements ZendeskEventListener {
 
     public void initialize(String channel) {
         Zendesk.initialize(
-                activity,
-                channel,
-                new SuccessCallback<Zendesk>() {
-                    @Override
-                    public void onSuccess(Zendesk zendesk) {
-                        Log.i(TAG, "Initialized successfully");
-                        sendSimpleMessage(MSG_INIT_SUCCESS);
-                        zendesk.addEventListener(ZendeskJNI.this);
-                    }
-                },
-                new FailureCallback<Throwable>() {
-                    @Override
-                    public void onFailure(Throwable t) {
-                        Log.e(TAG, "Failed to initialize", t);
-                        sendSimpleMessage(MSG_INIT_ERROR, "error", t.getLocalizedMessage());
-                    }
-                },
-                new DefaultMessagingFactory());
+            activity,
+            channel,
+            new SuccessCallback<Zendesk>() {
+                @Override
+                public void onSuccess(Zendesk zendesk) {
+                    Log.i(TAG, "Initialized successfully");
+                    sendSimpleMessage(MSG_INIT_SUCCESS);
+                    zendesk.addEventListener(ZendeskJNI.this);
+                }
+            },
+            new FailureCallback<Throwable>() {
+                @Override
+                public void onFailure(Throwable t) {
+                    Log.e(TAG, "Failed to initialize", t);
+                    sendSimpleMessage(MSG_INIT_ERROR, "error", t.getLocalizedMessage());
+                }
+            },
+            new DefaultMessagingFactory());
     }
 
     public void showMessaging() {
         Log.i(TAG, "Showing messaging");
         Zendesk.getInstance().getMessaging().showMessaging(activity);
+    }
+
+    public void login(String jwt) {
+        Log.i(TAG, "Login");
+        Zendesk.getInstance().loginUser(
+            jwt,
+            new SuccessCallback<ZendeskUser>() {
+                @Override
+                public void onSuccess(ZendeskUser user) {
+                    Log.i(TAG, "Login successful");
+                    sendSimpleMessage(MSG_AUTHENTICATION_SUCCESS);
+                }
+            },
+            new FailureCallback<Throwable>() {
+                @Override
+                public void onFailure(Throwable t) {
+                    Log.e(TAG, "Failed to login", t);
+                    sendSimpleMessage(MSG_AUTHENTICATION_FAILED, "error", t.getLocalizedMessage());
+                }
+            });
+    }
+
+    public void logout() {
+        Log.i(TAG, "Logout");
+        Zendesk.getInstance().logoutUser(
+            new SuccessCallback<Unit>() {
+                @Override
+                public void onSuccess(Unit u) {
+                    Log.i(TAG, "Logout successful");
+                    sendSimpleMessage(MSG_LOGOUT_SUCCESS);
+                }
+            },
+            new FailureCallback<Throwable>() {
+                @Override
+                public void onFailure(Throwable t) {
+                    Log.e(TAG, "Failed to logout", t);
+                    sendSimpleMessage(MSG_LOGOUT_FAILED, "error", t.getLocalizedMessage());
+                }
+            });
     }
 
     public void addConversationFieldString(String key, String value) {

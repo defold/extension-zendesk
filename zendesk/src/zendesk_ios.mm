@@ -118,9 +118,11 @@ namespace dmZendesk {
                 [zendesk addEventObserver:g_ZendeskIOS.m_ZendeskObserver :^(enum ZDKZendeskEvent event, id _Nullable value) {
                     switch (event) {
                     case ZDKZendeskEventUnreadMessageCountChanged:
-                        // Your custom action...
+                        SendSimpleMessage(MSG_UNREAD_MESSAGE_COUNT_CHANGED);
+                        break;
                     case ZDKZendeskEventAuthenticationFailed: 
-                        // Your custom action...
+                        SendSimpleMessage(MSG_AUTHENTICATION_FAILED);
+                        break;
                     default:
                         break;
                     }

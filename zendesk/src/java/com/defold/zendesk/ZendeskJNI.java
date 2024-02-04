@@ -112,7 +112,7 @@ public class ZendeskJNI implements ZendeskEventListener {
         }
         else if (zendeskEvent instanceof FieldValidationFailed) {
             Log.i(TAG, "FieldValidationFailed");
-            sendSimpleMessage(MSG_AUTHENTICATION_FAILED);
+            sendSimpleMessage(MSG_FIELD_VALIDATION_FAILED);
         }
     }
 

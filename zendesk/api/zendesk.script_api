@@ -34,6 +34,57 @@
 
 #*****************************************************************************************************
 
+    - name: set_conversation_fields
+      type: function
+      desc: Set conversation fields in the SDK to add contextual data about the conversation.
+      
+      params:
+        - name: fields
+          type: table
+          desc: Key value pairs of fields. Keys must be strings. Values can be strings, numbers and booleans.
+
+#*****************************************************************************************************
+
+    - name: clear_conversation_fields
+      type: function
+      desc: Clear conversation fields from the SDK storage when the client side context changes.
+
+#*****************************************************************************************************
+
+    - name: set_conversation_tags
+      type: function
+      desc: Set custom conversation tags in the SDK to add contextual data about the conversation.
+      
+      params:
+        - name: tags
+          type: table
+          desc: Array of string
+
+#*****************************************************************************************************
+
+    - name: clear_conversation_tags
+      type: function
+      desc: Clear conversation tags from SDK storage when the client side context changes.
+
+#*****************************************************************************************************
+
+    - name: login
+      type: function
+      desc: Authenticate a user.
+      
+      params:
+        - name: jwt
+          type: string
+          desc: JSON Web Token for authentication
+
+#*****************************************************************************************************
+
+    - name: logout
+      type: function
+      desc: Unauthenticate a user.
+
+#*****************************************************************************************************
+
     - name: MSG_INIT_ERROR
       type: number
       desc: An error was detected while initializing the Zendesk SDK 
@@ -62,5 +113,20 @@
       type: number
       desc: Validation checks failed for conversation fields
 
+    - name: MSG_LOGIN_SUCCESS
+      type: number
+      desc: Login was successful
+
+    - name: MSG_LOGIN_FAILED
+      type: number
+      desc: Login failed
+
+    - name: MSG_LOGOUT_SUCCESS
+      type: number
+      desc: Logout was successful
+
+    - name: MSG_LOGOUT_FAILED
+      type: number
+      desc: Logout failed
 
 #*****************************************************************************************************

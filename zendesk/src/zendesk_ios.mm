@@ -167,11 +167,11 @@ namespace dmZendesk
         [Zendesk.instance loginUserWith:[NSString stringWithUTF8String:jwt] completionHandler:^(ZDKZendeskUser * _Nullable user, NSError * _Nullable error) {
             if (error)
             {
-                SendSimpleMessage(MSG_AUTHENTICATION_FAILED);
+                SendSimpleMessage(MSG_LOGIN_FAILED);
             }
             else
             {
-                SendSimpleMessage(MSG_AUTHENTICATION_SUCCESS);
+                SendSimpleMessage(MSG_LOGIN_SUCCESS);
             }
         }];
 

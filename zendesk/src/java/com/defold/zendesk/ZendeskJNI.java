@@ -42,11 +42,12 @@ public class ZendeskJNI implements ZendeskEventListener {
     private static final int MSG_INTERNAL_ERROR =               2;
     private static final int MSG_ERROR =                        3;
     private static final int MSG_UNREAD_MESSAGE_COUNT_CHANGED = 4;
-    private static final int MSG_AUTHENTICATION_SUCCESS =       5;
-    private static final int MSG_AUTHENTICATION_FAILED =        6;
-    private static final int MSG_FIELD_VALIDATION_FAILED =      7;
-    private static final int MSG_LOGOUT_SUCCESS =               8;
-    private static final int MSG_LOGOUT_FAILED =                9;
+    private static final int MSG_AUTHENTICATION_FAILED =        5;
+    private static final int MSG_FIELD_VALIDATION_FAILED =      6;
+    private static final int MSG_LOGIN_SUCCESS =                7;
+    private static final int MSG_LOGIN_FAILED =                 8;
+    private static final int MSG_LOGOUT_SUCCESS =               9;
+    private static final int MSG_LOGOUT_FAILED =                10;
 
     private Activity activity;
 
@@ -92,14 +93,14 @@ public class ZendeskJNI implements ZendeskEventListener {
                 @Override
                 public void onSuccess(ZendeskUser user) {
                     Log.i(TAG, "Login successful");
-                    sendSimpleMessage(MSG_AUTHENTICATION_SUCCESS);
+                    sendSimpleMessage(MSG_LOGIN_SUCCESS);
                 }
             },
             new FailureCallback<Throwable>() {
                 @Override
                 public void onFailure(Throwable t) {
                     Log.e(TAG, "Failed to login", t);
-                    sendSimpleMessage(MSG_AUTHENTICATION_FAILED, "error", t.getLocalizedMessage());
+                    sendSimpleMessage(MSG_LOGIN_FAILED, "error", t.getLocalizedMessage());
                 }
             });
     }
@@ -142,7 +143,7 @@ public class ZendeskJNI implements ZendeskEventListener {
     }
 
     public void clearConversationFields() {
-        Log.i(TAG, "Add conversation field boolean");
+        Log.i(TAG, "Clear conversation fields");
         conversationFields.clear();
         Zendesk.getInstance().getMessaging().clearConversationFields();
     }

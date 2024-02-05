@@ -12,11 +12,12 @@ enum Message
     MSG_INTERNAL_ERROR =               2,
     MSG_ERROR =                        3,
     MSG_UNREAD_MESSAGE_COUNT_CHANGED = 4,
-    MSG_AUTHENTICATION_SUCCESS =       5,
-    MSG_AUTHENTICATION_FAILED =        6,
-    MSG_FIELD_VALIDATION_FAILED =      7,
-    MSG_LOGOUT_SUCCESS =               8,
-    MSG_LOGOUT_FAILED =                9,
+    MSG_AUTHENTICATION_FAILED =        5,
+    MSG_FIELD_VALIDATION_FAILED =      6,
+    MSG_LOGIN_SUCCESS =                7,
+    MSG_LOGIN_FAILED =                 8,
+    MSG_LOGOUT_SUCCESS =               9,
+    MSG_LOGOUT_FAILED =                10,
 };
 
 struct CallbackData

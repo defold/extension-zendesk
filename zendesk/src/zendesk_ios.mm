@@ -206,6 +206,16 @@ namespace dmZendesk
         [Zendesk.instance.messaging clearConversationFields];
     }
 
+    void AddConversationTag(const char* tag) {
+        [g_ZendeskIOS.m_ConversationTags addObject:[NSString stringWithUTF8String:tag]];
+        [Zendesk.instance.messaging setConversationTags:g_ZendeskIOS.m_ConversationTags];
+    }
+
+    void ClearConversationTags() {
+        [g_ZendeskIOS.m_ConversationTags removeAllObjects];
+        [Zendesk.instance.messaging clearConversationTags];
+    }
+
 } // namespace dmZendesk
 
 #endif // DM_PLATFORM_IOS

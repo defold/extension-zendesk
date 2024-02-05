@@ -27,6 +27,8 @@ namespace dmZendesk
         jmethodID      m_AddConversationFieldFloat;
         jmethodID      m_AddConversationFieldBoolean;
         jmethodID      m_ClearConversationFields;
+        jmethodID      m_AddConversationTag;
+        jmethodID      m_ClearConversationTags;
     };
 
     static ZendeskJNI g_Zendesk;
@@ -41,6 +43,8 @@ namespace dmZendesk
         g_Zendesk.m_AddConversationFieldFloat = env->GetMethodID(cls, "addConversationFieldFloat", "(Ljava/lang/String;F)V");
         g_Zendesk.m_AddConversationFieldBoolean = env->GetMethodID(cls, "addConversationFieldBoolean", "(Ljava/lang/String;Z)V");
         g_Zendesk.m_ClearConversationFields = env->GetMethodID(cls, "clearConversationFields", "()V");
+        g_Zendesk.m_AddConversationTag = env->GetMethodID(cls, "addConversationTag", "(Ljava/lang/String;)V");
+        g_Zendesk.m_ClearConversationTags = env->GetMethodID(cls, "clearConversationTags", "()V");
     }
 
     static void CallVoidMethod(jobject instance, jmethodID method)
@@ -140,6 +144,14 @@ namespace dmZendesk
 
     void ClearConversationFields() {
         CallVoidMethod(g_Zendesk.m_ZendeskJNI, g_Zendesk.m_ClearConversationFields);
+    }
+
+    void AddConversationTag(const char* tag) {
+        CallVoidMethodString(g_Zendesk.m_ZendeskJNI, g_Zendesk.m_AddConversationTag, tag);
+    }
+
+    void ClearConversationTags() {
+        CallVoidMethod(g_Zendesk.m_ZendeskJNI, g_Zendesk.m_ClearConversationTags);
     }
 
 

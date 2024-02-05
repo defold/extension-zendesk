@@ -100,6 +100,29 @@ static int Lua_ClearConversationFields(lua_State* L)
     return 0;
 }
 
+static int Lua_SetConversationTags(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    luaL_checktype(L, 1, LUA_TTABLE);
+
+    size_t len = lua_objlen(L, 1);
+    for (int index = 1; index <= len; index++) {
+        lua_pushinteger(L, index);
+        lua_gettable(L, 1); 
+        const char* tag = luaL_checkstring(L, -1);
+        lua_pop(L, 1);
+        AddConversationTag(tag);
+    }
+    return 0;
+}
+
+static int Lua_ClearConversationTags(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    ClearConversationTags();
+    return 0;
+}
+
 static int Lua_SetCallback(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 0);
@@ -135,6 +158,8 @@ static const luaL_reg Zendesk_methods[] =
     {"set_callback", Lua_SetCallback},
     {"set_conversation_fields", Lua_SetConversationFields},
     {"clear_conversation_fields", Lua_ClearConversationFields},
+    {"set_conversation_tags", Lua_SetConversationTags},
+    {"clear_conversation_tags", Lua_ClearConversationTags},
     {"show_messaging", Lua_ShowMessaging},
     {"login", Lua_Login},
     {"logout", Lua_Logout},

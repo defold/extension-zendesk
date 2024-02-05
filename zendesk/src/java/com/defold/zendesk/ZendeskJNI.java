@@ -8,6 +8,8 @@ import org.json.JSONException;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 
 import kotlin.Unit;
 
@@ -49,6 +51,7 @@ public class ZendeskJNI implements ZendeskEventListener {
     private Activity activity;
 
     private Map<String, Object> conversationFields = new HashMap<>();
+    private List<String> conversationTags = new ArrayList<>();
 
     public ZendeskJNI(Activity activity) {
         this.activity = activity;
@@ -142,6 +145,18 @@ public class ZendeskJNI implements ZendeskEventListener {
         Log.i(TAG, "Add conversation field boolean");
         conversationFields.clear();
         Zendesk.getInstance().getMessaging().clearConversationFields();
+    }
+
+    public void addConversationTag(String tag) {
+        Log.i(TAG, "Add conversation tag");
+        conversationTags.add(tag);
+        Zendesk.getInstance().getMessaging().setConversationTags(conversationTags);
+    }
+
+    public void clearConversationTags() {
+        Log.i(TAG, "Clear conversation tags");
+        conversationTags.clear();
+        Zendesk.getInstance().getMessaging().clearConversationTags();
     }
 
     @Override

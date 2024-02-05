@@ -15,6 +15,8 @@ void AddConversationFieldString(const char* key, const char* value);
 void AddConversationFieldNumber(const char* key, const float value);
 void AddConversationFieldBoolean(const char* key, const bool value);
 void ClearConversationFields();
+void AddConversationTag(const char* tag);
+void ClearConversationTags();
 
 } //namespace dmZendesk
 

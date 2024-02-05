@@ -37,6 +37,7 @@ namespace dmZendesk
 
         ZendeskObserver*       m_ZendeskObserver;
         NSMutableDictionary*   m_ConversationFields;
+        NSMutableArray*        m_ConversationTags;
         bool                   m_Initialized;
     };
 
@@ -98,9 +99,13 @@ namespace dmZendesk
 
     void Initialize_Ext()
     {
-        g_ZendeskIOS.m_Initialized = FALSE;
-        g_ZendeskIOS.m_ConversationFields = [[NSMutableDictionary alloc] init];
-        g_ZendeskIOS.m_ZendeskObserver = [[ZendeskObserver alloc] init];
+        if (!g_ZendeskIOS.m_Initialized)
+        {
+            g_ZendeskIOS.m_Initialized = FALSE;
+            g_ZendeskIOS.m_ConversationFields = [[NSMutableDictionary alloc] init];
+            g_ZendeskIOS.m_ConversationTags = [[NSMutableArray alloc] init];
+            g_ZendeskIOS.m_ZendeskObserver = [[ZendeskObserver alloc] init];
+        }
     }
 
     void Finalize_Ext()
@@ -108,6 +113,10 @@ namespace dmZendesk
         if (g_ZendeskIOS.m_Initialized)
         {
             [[Zendesk instance] removeEventObserver:g_ZendeskIOS.m_ZendeskObserver];
+            delete g_ZendeskIOS.m_ConversationFields;
+            delete g_ZendeskIOS.m_ConversationTags;
+            g_ZendeskIOS.m_ConversationFields = NULL;
+            g_ZendeskIOS.m_ConversationTags = NULL;
             g_ZendeskIOS.m_Initialized = FALSE;
         }
     }

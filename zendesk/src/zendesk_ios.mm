@@ -43,10 +43,6 @@ namespace dmZendesk
 
     ZendeskIOS g_ZendeskIOS;
 
-    // NSMutableDictionary *g_ConversationFields = [[NSMutableDictionary alloc] init];
-    // bool g_Initialized = FALSE;
-    // ZendeskExt* g_ZendeskExt = [[ZendeskExt alloc] init]
-
     void SendSimpleMessage(Message msg, id obj)
     {
         NSError* error;
@@ -113,8 +109,6 @@ namespace dmZendesk
         if (g_ZendeskIOS.m_Initialized)
         {
             [[Zendesk instance] removeEventObserver:g_ZendeskIOS.m_ZendeskObserver];
-            delete g_ZendeskIOS.m_ConversationFields;
-            delete g_ZendeskIOS.m_ConversationTags;
             g_ZendeskIOS.m_ConversationFields = NULL;
             g_ZendeskIOS.m_ConversationTags = NULL;
             g_ZendeskIOS.m_Initialized = FALSE;

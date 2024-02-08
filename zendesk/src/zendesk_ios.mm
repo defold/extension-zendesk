@@ -152,7 +152,7 @@ namespace dmZendesk
         if (viewController != NULL)
         {
             UIWindow* window = (UIWindow*)dmGraphics::GetNativeiOSUIWindow();
-            [window.rootViewController.navigationController showViewController:viewController sender:window.rootViewController];
+            [window.rootViewController showViewController:viewController sender:window.rootViewController];
         }
     }
 

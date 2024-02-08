@@ -139,6 +139,7 @@ namespace dmZendesk
                         SendSimpleMessage(MSG_AUTHENTICATION_FAILED);
                         break;
                     default:
+                        dmLogInfo("Unknown Zendesk event %d", event);
                         break;
                     }
                 }];

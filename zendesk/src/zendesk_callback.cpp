@@ -18,7 +18,7 @@ static void DestroyCallback()
     }
 }
 
-static void InvokeCallback(Message type, const char*json)
+static void InvokeCallback(Message type, const char* json)
 {
     if (!dmScript::IsCallbackValid(m_luaCallback))
     {
@@ -69,7 +69,7 @@ void SetLuaCallback(lua_State* L, int pos)
     }
 }
 
-void AddToQueueCallback(Message type, const char*json)
+void AddToQueueCallback(Message type, const char* json)
 {
     CallbackData data;
     data.msg = type;

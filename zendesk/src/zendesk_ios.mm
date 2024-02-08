@@ -20,12 +20,6 @@
 @class ZDKDefaultMessagingFactory;
 @class ZDKZendeskUser;
 
-@interface ZendeskObserver : NSObject
-@end
-
-@implementation ZendeskObserver
-@end
-
 namespace dmZendesk
 {
     struct ZendeskIOS
@@ -35,7 +29,7 @@ namespace dmZendesk
             memset(this, 0, sizeof(*this));
         }
 
-        ZendeskObserver*       m_ZendeskObserver;
+        NSObject*              m_ZendeskObserver;
         NSMutableDictionary*   m_ConversationFields;
         NSMutableArray*        m_ConversationTags;
         bool                   m_Initialized;
@@ -100,7 +94,7 @@ namespace dmZendesk
             g_ZendeskIOS.m_Initialized = FALSE;
             g_ZendeskIOS.m_ConversationFields = [[NSMutableDictionary alloc] init];
             g_ZendeskIOS.m_ConversationTags = [[NSMutableArray alloc] init];
-            g_ZendeskIOS.m_ZendeskObserver = [[ZendeskObserver alloc] init];
+            g_ZendeskIOS.m_ZendeskObserver = [[NSObject alloc] init];
         }
     }
 

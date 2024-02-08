@@ -1,20 +1,30 @@
 function init(self)
-	if not zendesk then
-		print("Zendesk is not supported on this platform")
+	go.animate(".", "euler.z", go.PLAYBACK_LOOP_FORWARD, 360, go.EASING_LINEAR, 10)
+
+	local info = sys.get_sys_info()
+	local is_android = info.system_name == "Android"
+	local is_ios = info.system_name == "iPhone OS"
+
+	if not zendesk or not (is_android or is_ios) then
+		print("Zendesk is not supported on", info.system_name)
 		return
 	end
 
 	zendesk.set_callback(function(self, event, data)
+		print("Callback", event, data)
 		if event == zendesk.MSG_ERROR then
 			print("An error occured")
 			pprint(data)
-		elseif event == zendesk.MSG_INITIALIZED then
+		elseif event == zendesk.MSG_INIT_SUCCESS then
 			print("Initialized")
 			pprint(data)
 			zendesk.show_messaging()
 		end
 	end)
 
-	local channel = sys.get_config_string("zendesk.channel")
-	zendesk.initialize(channel)
+	if is_android then
+		zendesk.initialize(sys.get_config_string("zendesk.channel_android"))
+	elseif is_ios then
+		zendesk.initialize(sys.get_config_string("zendesk.channel_ios"))
+	end
 end

@@ -122,7 +122,7 @@ namespace dmZendesk
                       completionHandler:^(Zendesk * _Nullable zendesk, NSError * _Nullable error) {
             if (error != nil)
             {
-                NSLog(@"Zendesk did not initialize.\nError: %@", error.localizedDescription);
+                dmLogError("Zendesk did not initialize %s", error.localizedDescription);
                 SendSimpleMessage(MSG_INIT_ERROR, @"error", error.localizedDescription);
             }
             else

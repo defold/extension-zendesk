@@ -130,7 +130,7 @@ public class ZendeskJNI implements ZendeskEventListener {
         Zendesk.getInstance().getMessaging().setConversationFields(conversationFields);
     }
 
-    public void addConversationFieldString(String key, float value) {
+    public void addConversationFieldFloat(String key, float value) {
         Log.i(TAG, "Add conversation field float");
         conversationFields.put(key, value);
         Zendesk.getInstance().getMessaging().setConversationFields(conversationFields);

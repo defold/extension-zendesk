@@ -1,0 +1,2 @@
+# Native code loads the extension-owned Java bridge and methods by name through JNI.
+-keep,allowoptimization class com.defold.zendesk.** { *; }

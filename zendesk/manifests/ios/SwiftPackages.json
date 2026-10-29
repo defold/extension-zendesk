@@ -1,0 +1,11 @@
+{
+  "platform": "ios",
+  "minVersion": "16.0",
+  "packages": [
+    {
+      "url": "https://github.com/zendesk/sdk_messaging_ios.git",
+      "from": "2.42.0",
+      "products": ["ZendeskSDKMessaging"]
+    }
+  ]
+}
